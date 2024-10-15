@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Toaster } from 'react-hot-toast';
 import { Button } from "@/components/ui/button";
@@ -16,14 +16,20 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Link } from 'react-router-dom';
 import { useLogin } from "../../hooks/useLogin";
 import { LoginValidationErrors, validateLoginForm } from "../../validators/loginValidator";
-import LanguageToggle from "../toggles/LanguageToggle.tsx";
 
 export function LoginForm() {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState<LoginValidationErrors>({});
     const { login, isLoading, isError, error: apiError } = useLogin();
+    const [currentLang, setCurrentLang] = useState(i18n.language);
+
+    useEffect(() => {
+        const savedLang = localStorage.getItem('language') || 'en';
+        setCurrentLang(savedLang);
+        i18n.changeLanguage(savedLang);
+    }, [i18n]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,14 +43,6 @@ export function LoginForm() {
 
     return (
       <div className="flex min-h-screen flex-col">
-          <div className="flex justify-end items-center p-4 space-x-4">
-              <LanguageToggle />
-              <Button>
-              <Link to="/register" className="">
-                  {t('auth.register')}
-              </Link>
-              </Button>
-          </div>
           <div className="flex-1 flex justify-center items-center">
               <Card className="w-[400px]">
                   <CardHeader>
@@ -100,8 +98,8 @@ export function LoginForm() {
                           {t('auth.forgotPassword')}
                       </Button>
                       <div className="text-sm text-center">
-                          {t('noAccount')}{' '}
-                          <Link to="/register" className="text-blue-600 hover:underline">
+                          {t('auth.noAccount')}{' '}
+                          <Link to={`/${currentLang}/register`} className="text-blue-600 hover:underline">
                               {t('auth.registerHere')}
                           </Link>
                       </div>

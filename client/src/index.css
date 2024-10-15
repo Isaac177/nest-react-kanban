@@ -1,13 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
+  font-family: 'Ubuntu', sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -16,9 +18,7 @@
 
 
 @layer base {
-
-  @layer base {
-    :root {
+   :root {
       --background: 0 0% 100%;
       --foreground: 240 10% 3.9%;
       --card: 0 0% 100%;
@@ -73,7 +73,6 @@
       --chart-4: 280 65% 60%;
       --chart-5: 340 75% 55%;
     }
-  }
 
 
 @layer base {
