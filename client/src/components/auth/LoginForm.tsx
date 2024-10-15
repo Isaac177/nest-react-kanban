@@ -1,5 +1,5 @@
-// components/auth/LoginForm.tsx
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Toaster } from 'react-hot-toast';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,8 +16,10 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Link } from 'react-router-dom';
 import { useLogin } from "../../hooks/useLogin";
 import { LoginValidationErrors, validateLoginForm } from "../../validators/loginValidator";
+import LanguageToggle from "../toggles/LanguageToggle.tsx";
 
 export function LoginForm() {
+    const { t } = useTranslation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState<LoginValidationErrors>({});
@@ -34,65 +36,73 @@ export function LoginForm() {
     };
 
     return (
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen flex-col">
+          <div className="flex justify-end items-center p-4 space-x-4">
+              <LanguageToggle />
+              <Button>
+              <Link to="/register" className="">
+                  {t('auth.register')}
+              </Link>
+              </Button>
+          </div>
           <div className="flex-1 flex justify-center items-center">
               <Card className="w-[400px]">
                   <CardHeader>
-                      <CardTitle className="text-2xl">Welcome to NoteKeeper</CardTitle>
-                      <CardDescription>Sign in to access your notes</CardDescription>
+                      <CardTitle className="text-2xl">{t('auth.welcome')}</CardTitle>
+                      <CardDescription>{t('auth.signInDescription')}</CardDescription>
                   </CardHeader>
                   <CardContent>
                       <form onSubmit={handleSubmit} className="space-y-4">
                           <div className="space-y-2">
                               <Label htmlFor="email" className="text-sm font-medium">
-                                  Email
+                                  {t('auth.email')}
                               </Label>
                               <Input
                                 id="email"
                                 type="email"
-                                placeholder="Enter your email"
+                                placeholder={t('auth.emailPlaceholder')}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                               />
-                              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                              {errors.email && <p className="text-red-500 text-xs mt-1">{t(errors.email)}</p>}
                           </div>
                           <div className="space-y-2">
                               <Label htmlFor="password" className="text-sm font-medium">
-                                  Password
+                                  {t('auth.password')}
                               </Label>
                               <Input
                                 id="password"
                                 type="password"
-                                placeholder="Enter your password"
+                                placeholder={t('auth.passwordPlaceholder')}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                               />
                               {errors.password && (
-                                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                                <p className="text-red-500 text-xs mt-1">{t(errors.password)}</p>
                               )}
                           </div>
                           {isError && (
                             <Alert variant="destructive">
                                 <AlertDescription>
-                                    {apiError instanceof Error ? apiError.message : 'An error occurred'}
+                                    {apiError instanceof Error ? t(apiError.message) : t('auth.genericError')}
                                 </AlertDescription>
                             </Alert>
                           )}
                           <Button className="w-full" type="submit" disabled={isLoading}>
-                              {isLoading ? 'Signing In...' : 'Sign In'}
+                              {isLoading ? t('auth.signingIn') : t('auth.signIn')}
                           </Button>
                       </form>
                   </CardContent>
                   <CardFooter className="flex flex-col space-y-2">
                       <Button variant="link" className="w-full">
-                          Forgot password?
+                          {t('auth.forgotPassword')}
                       </Button>
                       <div className="text-sm text-center">
-                          Don't have an account?{' '}
+                          {t('noAccount')}{' '}
                           <Link to="/register" className="text-blue-600 hover:underline">
-                              Register here
+                              {t('auth.registerHere')}
                           </Link>
                       </div>
                   </CardFooter>

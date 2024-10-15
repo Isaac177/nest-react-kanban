@@ -7,9 +7,6 @@ import KanbanBoard from "../components/notes/KanbanBoard.tsx";
 const Dashboard: React.FC = () => {
   const [currentPath, setCurrentPath] = useState('/dashboard');
 
-  const updateCurrentPath = (newPath: string) => {
-    setCurrentPath(newPath);
-  };
 
   return (
     <div className="flex h-screen bg-background lg:max-w-7xl mx-auto border rounded-xl m-20">

@@ -1,0 +1,21 @@
+{
+  "auth":{
+    "welcome": "Welcome to NoteKeeper",
+    "signInDescription": "Sign in to access your notes",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "signIn": "Sign In",
+    "signingIn": "Signing In...",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "registerHere": "Register here",
+    "register": "Register",
+    "genericError": "An error occurred",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordTooShort": "Password must be at least 8 characters long",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required"
+  }
+}

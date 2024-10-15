@@ -1,0 +1,21 @@
+{
+  "auth": {
+    "welcome": "NoteKeeper-ге қош келдіңіз",
+    "signInDescription": "Жазбаларыңызға қол жеткізу үшін жүйеге кіріңіз",
+    "email": "Электрондық пошта",
+    "emailPlaceholder": "Электрондық поштаңызды енгізіңіз",
+    "password": "Құпия сөз",
+    "passwordPlaceholder": "Құпия сөзіңізді енгізіңіз",
+    "signIn": "Кіру",
+    "signingIn": "Кіру орындалуда...",
+    "forgotPassword": "Құпия сөзді ұмыттыңыз ба?",
+    "noAccount": "Аккаунтыңыз жоқ па?",
+    "registerHere": "Мұнда тіркеліңіз",
+    "register": "Тіркелу",
+    "genericError": "Қате орын алды",
+    "invalidEmail": "Жарамды электрондық пошта мекенжайын енгізіңіз",
+    "passwordTooShort": "Құпия сөз кемінде 8 таңбадан тұруы керек",
+    "emailRequired": "Электрондық пошта қажет",
+    "passwordRequired": "Құпия сөз қажет"
+  }
+}
