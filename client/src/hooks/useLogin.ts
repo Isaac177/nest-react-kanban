@@ -1,6 +1,7 @@
+// hooks/useLogin.ts
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { apiCall, setAuthToken } from "../utils/apiCall";
+import { apiCall } from "../utils/apiCall";
 
 interface LoginCredentials {
   email: string;
@@ -9,6 +10,7 @@ interface LoginCredentials {
 
 interface LoginResponse {
   access_token: string;
+  refresh_token: string;
 }
 
 export const useLogin = () => {
@@ -18,9 +20,9 @@ export const useLogin = () => {
     mutationFn: (credentials: LoginCredentials) =>
       apiCall<LoginResponse>("POST", "/auth/login", credentials),
     onSuccess: (data) => {
-      setAuthToken(data.access_token);
-      localStorage.setItem("token", data.access_token);
-      navigate("/notes");
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("refresh_token", data.refresh_token);
+      navigate("/dashboard");
     },
   });
 

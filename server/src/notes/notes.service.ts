@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Note, NoteDocument } from './schemas/note.schema';
 import { CreateNoteDto, UpdateNoteDto, MoveNoteDto } from './dto/note.dto';
+import { MongoServerError } from 'mongodb';
+
 
 @Injectable()
 export class NotesService {
@@ -66,47 +68,98 @@ export class NotesService {
     moveNoteDto: MoveNoteDto,
     userId: string,
   ): Promise<Note> {
-    const session = await this.noteModel.db.startSession();
-    session.startTransaction();
+    const maxRetries = 5;
+    let retryCount = 0;
 
-    try {
-      const note = await this.noteModel
-        .findOne({ _id: id, user: userId })
-        .session(session);
-      if (!note) {
-        throw new NotFoundException('Note not found');
+    while (retryCount < maxRetries) {
+      const session = await this.noteModel.db.startSession();
+      session.startTransaction();
+
+      try {
+        const note = await this.noteModel
+          .findOne({ _id: id, user: userId })
+          .session(session);
+        if (!note) {
+          throw new NotFoundException('Note not found');
+        }
+
+        const oldColumn = note.column;
+        const newColumn = moveNoteDto.column;
+
+        if (oldColumn !== newColumn) {
+          await this.noteModel
+            .updateMany(
+              { user: userId, column: oldColumn, order: { $gt: note.order } },
+              { $inc: { order: -1 } },
+            )
+            .session(session);
+
+          const lastNoteInNewColumn = await this.noteModel
+            .findOne({ user: userId, column: newColumn })
+            .sort('-order')
+            .session(session);
+
+          const newOrder = lastNoteInNewColumn ? lastNoteInNewColumn.order + 1 : 0;
+
+          note.column = newColumn;
+          note.order = newOrder;
+        } else {
+          const minOrder = Math.min(note.order, moveNoteDto.order);
+          const maxOrder = Math.max(note.order, moveNoteDto.order);
+
+          if (note.order > moveNoteDto.order) {
+            await this.noteModel
+              .updateMany(
+                {
+                  user: userId,
+                  column: newColumn,
+                  order: { $gte: moveNoteDto.order, $lt: note.order },
+                },
+                { $inc: { order: 1 } },
+              )
+              .session(session);
+          } else if (note.order < moveNoteDto.order) {
+            await this.noteModel
+              .updateMany(
+                {
+                  user: userId,
+                  column: newColumn,
+                  order: { $gt: note.order, $lte: moveNoteDto.order },
+                },
+                { $inc: { order: -1 } },
+              )
+              .session(session);
+          }
+
+          note.order = moveNoteDto.order;
+        }
+
+        await note.save({ session });
+
+        await session.commitTransaction();
+        session.endSession();
+        return note;
+      } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+
+        if (
+          error instanceof MongoServerError &&
+          error.hasErrorLabel('TransientTransactionError')
+        ) {
+          retryCount++;
+          console.warn(
+            `TransientTransactionError encountered. Retry attempt ${retryCount}`,
+          );
+          await new Promise((resolve) => setTimeout(resolve, 100 * retryCount));
+          continue;
+        } else {
+          throw error;
+        }
       }
-
-      await this.noteModel
-        .updateMany(
-          { user: userId, column: note.column, order: { $gt: note.order } },
-          { $inc: { order: -1 } },
-        )
-        .session(session);
-
-      await this.noteModel
-        .updateMany(
-          {
-            user: userId,
-            column: moveNoteDto.column,
-            order: { $gte: moveNoteDto.order },
-          },
-          { $inc: { order: 1 } },
-        )
-        .session(session);
-
-      note.column = moveNoteDto.column;
-      note.order = moveNoteDto.order;
-      await note.save({ session });
-
-      await session.commitTransaction();
-      return note;
-    } catch (error) {
-      await session.abortTransaction();
-      throw error;
-    } finally {
-      session.endSession();
     }
+
+    throw new Error('Transaction failed after maximum retries');
   }
 
   async archiveNote(id: string, userId: string): Promise<Note> {

@@ -17,9 +17,6 @@ export type NoteDocument = Note & Document;
   },
 })
 export class Note {
-  @Prop({ type: Types.ObjectId, auto: true })
-  _id: Types.ObjectId;
-
   @Prop({ required: true })
   title: string;
 
@@ -53,8 +50,6 @@ export class Note {
 
   @Prop({ min: 1, max: 5 })
   priority: number;
-
-  id: string;
 }
 
 export const NoteSchema = SchemaFactory.createForClass(Note);

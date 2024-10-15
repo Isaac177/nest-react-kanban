@@ -1,22 +1,24 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document, SchemaTypes } from 'mongoose';
 
 export type UserDocument = User & Document;
 
 @Schema({
+  timestamps: true,
   toJSON: {
     virtuals: true,
-    transform: (_, ret) => {
+    transform: (doc, ret) => {
       ret.id = ret._id.toString();
       delete ret._id;
       delete ret.__v;
+      delete ret.password;
       return ret;
     },
   },
 })
 export class User {
-  @Prop({ type: Types.ObjectId, auto: true })
-  _id: Types.ObjectId;
+  @Prop({ type: SchemaTypes.ObjectId, auto: true })
+  _id: string;
 
   @Prop({ required: true, unique: true })
   username: string;
@@ -31,25 +33,17 @@ export class User {
   isVerified: boolean;
 
   @Prop()
-  verificationToken: string;
+  verificationToken?: string;
 
   @Prop()
-  resetPasswordToken: string;
+  resetPasswordToken?: string;
 
   @Prop()
-  resetPasswordExpires: Date;
-
-  @Prop({ default: Date.now })
-  createdAt: Date;
-
-  @Prop({ default: Date.now })
-  updatedAt: Date;
-
-  id: string;
+  resetPasswordExpires?: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.virtual('id').get(function () {
-  return this._id.toHexString();
+  return this._id.toString();
 });

@@ -1,4 +1,3 @@
-// src/users/users.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -14,13 +13,22 @@ export class UsersService {
     hashedPassword: string,
     verificationToken: string,
   ): Promise<User> {
+    console.log('Creating user with:', { username, email, verificationToken });
     const newUser = new this.userModel({
       username,
       email,
       password: hashedPassword,
       verificationToken,
     });
-    return newUser.save();
+    console.log('New user object:', newUser);
+    try {
+      const savedUser = await newUser.save();
+      console.log('Saved user:', savedUser);
+      return savedUser;
+    } catch (error) {
+      console.error('Error saving user:', error);
+      throw error;
+    }
   }
 
   async findByUsername(username: string): Promise<User | null> {

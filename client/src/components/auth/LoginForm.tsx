@@ -1,19 +1,27 @@
+// components/auth/LoginForm.tsx
 import React, { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+    CardContent,
+    CardFooter,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Link } from 'react-router-dom';
-import { useLogin } from "../../hooks/useLogin.ts";
-import { LoginValidationErrors, validateLoginForm } from "../../validators/loginValidator.ts";
+import { useLogin } from "../../hooks/useLogin";
+import { LoginValidationErrors, validateLoginForm } from "../../validators/loginValidator";
 
 export function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState<LoginValidationErrors>({});
-    const { login, isLoading, isError, error:apiError } = useLogin();
+    const { login, isLoading, isError, error: apiError } = useLogin();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -47,8 +55,8 @@ export function LoginForm() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                               />
+                              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                           </div>
-                          {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                           <div className="space-y-2">
                               <Label htmlFor="password" className="text-sm font-medium">
                                   Password
@@ -61,8 +69,10 @@ export function LoginForm() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                               />
+                              {errors.password && (
+                                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                              )}
                           </div>
-                          {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
                           {isError && (
                             <Alert variant="destructive">
                                 <AlertDescription>
@@ -70,11 +80,7 @@ export function LoginForm() {
                                 </AlertDescription>
                             </Alert>
                           )}
-                          <Button
-                            className="w-full"
-                            type="submit"
-                            disabled={isLoading}
-                          >
+                          <Button className="w-full" type="submit" disabled={isLoading}>
                               {isLoading ? 'Signing In...' : 'Sign In'}
                           </Button>
                       </form>

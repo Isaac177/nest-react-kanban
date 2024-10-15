@@ -19,7 +19,7 @@ function LoginPageContent() {
                 progress={progress}
                 onLoaderFinished={() => setProgress(0)}
             />
-            <div className="hidden bg-muted lg:block h-screen">
+            <div className="hidden bg-muted lg:block h-full">
                 <img
                     src="https://picsum.photos/1920/1080"
                     alt="Random image"

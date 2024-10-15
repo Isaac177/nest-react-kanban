@@ -6,8 +6,9 @@ import {
   Min,
   Max,
   IsEnum,
-  IsArray,
-} from 'class-validator';
+  IsArray, IsInt
+} from "class-validator";
+import { Type } from "class-transformer";
 
 export class CreateNoteDto {
   @IsString()
@@ -26,18 +27,15 @@ export class CreateNoteDto {
 
   @IsOptional()
   @IsDate()
+  @Type(() => Date)
   dueDate?: Date;
 
-  @IsOptional()
-  @IsNumber()
+  @IsInt()
   @Min(1)
   @Max(5)
-  priority?: number;
-
-  @IsOptional()
-  @IsString()
-  assignedTo?: string;
+  priority: number;
 }
+
 
 export class UpdateNoteDto {
   @IsOptional()
@@ -49,12 +47,17 @@ export class UpdateNoteDto {
   content?: string;
 
   @IsOptional()
+  @IsEnum(['To Do', 'In Progress', 'Done'])
+  column?: string;
+
+  @IsOptional()
   @IsArray()
   @IsString({ each: true })
   tags?: string[];
 
   @IsOptional()
   @IsDate()
+  @Type(() => Date)
   dueDate?: Date;
 
   @IsOptional()
@@ -67,6 +70,7 @@ export class UpdateNoteDto {
   @IsString()
   assignedTo?: string;
 }
+
 
 export class MoveNoteDto {
   @IsEnum(['To Do', 'In Progress', 'Done'])

@@ -44,7 +44,7 @@ export class AuthService {
       hashedPassword,
       verificationToken,
     );
-    await this.sendVerificationEmail(email, verificationToken);
+    //await this.sendVerificationEmail(email, verificationToken);
 
     return {
       message:
@@ -58,7 +58,7 @@ export class AuthService {
       throw new BadRequestException('Invalid verification token');
     }
 
-    await this.usersService.verifyUser(user.id);
+    await this.usersService.verifyUser(user._id.toString());
     return { message: 'Email verified successfully' };
   }
 
@@ -68,13 +68,13 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    if (!user.isVerified) {
+    /*if (!user.isVerified) {
       throw new UnauthorizedException(
         'Please verify your email before logging in',
       );
-    }
+    }*/
 
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user._id.toString() };
     return {
       access_token: this.jwtService.sign(payload, { expiresIn: '15m' }),
       refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
@@ -90,7 +90,7 @@ export class AuthService {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
-      const newPayload = { email: user.email, sub: user.id };
+      const newPayload = { email: user.email, sub: user._id.toString() };
       return {
         access_token: this.jwtService.sign(newPayload, { expiresIn: '15m' }),
       };
@@ -106,7 +106,7 @@ export class AuthService {
     }
 
     const resetToken = uuidv4();
-    await this.usersService.setResetToken(user.id, resetToken);
+    await this.usersService.setResetToken(user._id.toString(), resetToken);
 
     await this.sendPasswordResetEmail(email, resetToken);
 
@@ -120,7 +120,7 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await this.usersService.resetPassword(user.id, hashedPassword);
+    await this.usersService.resetPassword(user._id.toString(), hashedPassword);
 
     return { message: 'Password reset successfully' };
   }
