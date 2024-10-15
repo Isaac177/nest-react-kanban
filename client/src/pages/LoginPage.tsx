@@ -1,6 +1,7 @@
 import { useState, useEffect, Suspense } from 'react'
-import LoadingBar from 'react-top-loading-bar'
-import {EmfyAmoIntegrationLoginForm} from "@/components/auth/LoginForm.tsx";
+import { LoginForm } from "../components/auth/LoginForm.tsx";
+import LoadingBar from "react-top-loading-bar";
+
 
 function LoginPageContent() {
     const [progress, setProgress] = useState(0)
@@ -26,7 +27,7 @@ function LoginPageContent() {
                 />
             </div>
             <div className="flex items-center justify-center py-12">
-                <EmfyAmoIntegrationLoginForm />
+                <LoginForm />
             </div>
         </div>
     )

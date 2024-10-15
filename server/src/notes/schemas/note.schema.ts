@@ -1,4 +1,3 @@
-// src/notes/schemas/note.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { User } from '../../users/schemas/user.schema';
@@ -30,7 +29,11 @@ export class Note {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   user: User | Types.ObjectId;
 
-  @Prop({ required: true, enum: ['To Do', 'In Progress', 'Done'], default: 'To Do' })
+  @Prop({
+    required: true,
+    enum: ['To Do', 'In Progress', 'Done'],
+    default: 'To Do',
+  })
   column: string;
 
   @Prop({ required: true, default: 0 })
@@ -51,14 +54,13 @@ export class Note {
   @Prop({ min: 1, max: 5 })
   priority: number;
 
-  id: string; // This will be populated by the virtual
+  id: string;
 }
 
 export const NoteSchema = SchemaFactory.createForClass(Note);
 
-NoteSchema.virtual('id').get(function() {
+NoteSchema.virtual('id').get(function () {
   return this._id.toHexString();
 });
 
-// Index for efficient querying by user and column
 NoteSchema.index({ user: 1, column: 1, order: 1 });
