@@ -1,5 +1,6 @@
 // utils/apiCall.ts
 import axios, { AxiosError } from 'axios';
+import i18next from "i18next";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
@@ -108,12 +109,20 @@ api.interceptors.response.use(
   }
 );
 
-export const apiCall = async <T>(method: string, url: string, data?: any): Promise<T> => {
+export const apiCall = async <T>(method: string, url: string, data?: any, config?: {
+  headers?: Record<string, string>;
+}): Promise<T> => {
   try {
+    const headers = {
+      'Accept-Language': i18next.language,
+      ...config?.headers,
+    };
+
     const response = await api.request<T>({
       method,
       url,
       data,
+      headers,
     });
     return response.data;
   } catch (error) {

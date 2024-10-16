@@ -1,5 +1,5 @@
-// components/TopBar.tsx
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { Search, CircleUser, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,17 +13,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import CreateNoteModal from "./CreateNoteModal";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "../../contexts/LanguageContext.tsx";
 
 const TopBar: React.FC = () => {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const getCurrentTabTitle = () => {
-    return "Dashboard";
+    return t('topBar.dashboard');
   };
 
   const getSearchPlaceholder = () => {
-    return "Search notes...";
+    return t('topBar.searchPlaceholder');
   };
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
@@ -34,7 +37,7 @@ const TopBar: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    navigate('/login');
+    navigate(`/${language}/login`);
   };
 
   return (
@@ -45,7 +48,7 @@ const TopBar: React.FC = () => {
             {getCurrentTabTitle()}
           </div>
           <Button className="hidden sm:flex" onClick={() => setIsCreateModalOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" /> New Note
+            <Plus className="mr-2 h-4 w-4" /> {t('topBar.newNote')}
           </Button>
           <form className="flex-1 sm:flex-initial" onSubmit={handleSearch}>
             <div className="relative">
@@ -61,21 +64,21 @@ const TopBar: React.FC = () => {
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
                 <CircleUser className="h-5 w-5" />
-                <span className="sr-only">Toggle user menu</span>
+                <span className="sr-only">{t('topBar.toggleUserMenu')}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{t('topBar.myAccount')}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => navigate('/settings')}>
-                Settings
+              <DropdownMenuItem onClick={() => navigate(`/${language}/settings`)}>
+                {t('topBar.settings')}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/support')}>
-                Support
+              <DropdownMenuItem onClick={() => navigate(`/${language}/support`)}>
+                {t('topBar.support')}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
-                Logout
+                {t('topBar.logout')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

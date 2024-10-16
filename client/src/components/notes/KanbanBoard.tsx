@@ -1,6 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { createPortal } from "react-dom";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+import LoadingBar from "react-top-loading-bar";
 import {
   DndContext,
   closestCorners,
@@ -19,24 +21,34 @@ import { SortableNote } from './SortableNote';
 import { apiCall } from "../../utils/apiCall";
 import { Note } from "../../types/note";
 
-const defaultColumns: { id: Note['column']; title: string }[] = [
-  { id: 'To Do', title: 'To Do' },
-  { id: 'In Progress', title: 'In Progress' },
-  { id: 'Done', title: 'Done' },
-];
-
 const KanbanBoard: React.FC = () => {
+  const { t } = useTranslation();
   const [notes, setNotes] = useState<Note[]>([]);
   const [activeNote, setActiveNote] = useState<Note | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const queryClient = useQueryClient();
+
+  const defaultColumns: { id: Note['column']; title: string }[] = [
+    { id: 'To Do', title: t('kanban.toDo') },
+    { id: 'In Progress', title: t('kanban.inProgress') },
+    { id: 'Done', title: t('kanban.done') },
+  ];
 
   const { data: fetchedNotes, isLoading, error } = useQuery<Note[]>({
     queryKey: ['notes'],
     queryFn: () => apiCall('GET', '/notes')
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (isLoading) {
+      setProgress(30);
+    } else {
+      setProgress(100);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
     if (fetchedNotes) {
       setNotes(fetchedNotes);
     }
@@ -178,34 +190,40 @@ const KanbanBoard: React.FC = () => {
     return ['To Do', 'In Progress', 'Done'].includes(id);
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error instanceof Error) return <div>An error occurred: {error.message}</div>;
+  if (error instanceof Error) return <div>{t('common.error')}: {error.message}</div>;
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCorners}
-      onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-        {defaultColumns.map(column => (
-          <Column
-            key={column.id}
-            id={column.id}
-            title={column.title}
-            notes={notesByColumn[column.id]}
-          />
-        ))}
-      </div>
-      {typeof document !== 'undefined' && createPortal(
-        <DragOverlay>
-          {activeNote && <SortableNote note={activeNote} />}
-        </DragOverlay>,
-        document.body
-      )}
-    </DndContext>
+    <>
+      <LoadingBar
+        color="#f11946"
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+      />
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+          {defaultColumns.map(column => (
+            <Column
+              key={column.id}
+              id={column.id}
+              title={column.title}
+              notes={notesByColumn[column.id]}
+            />
+          ))}
+        </div>
+        {typeof document !== 'undefined' && createPortal(
+          <DragOverlay>
+            {activeNote && <SortableNote note={activeNote} />}
+          </DragOverlay>,
+          document.body
+        )}
+      </DndContext>
+    </>
   );
 };
 

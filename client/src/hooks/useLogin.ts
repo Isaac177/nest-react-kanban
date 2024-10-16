@@ -1,7 +1,7 @@
-// hooks/useLogin.ts
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { apiCall } from "../utils/apiCall";
+import { useTranslation } from 'react-i18next';
 
 interface LoginCredentials {
   email: string;
@@ -15,14 +15,19 @@ interface LoginResponse {
 
 export const useLogin = () => {
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   const mutation = useMutation<LoginResponse, Error, LoginCredentials>({
     mutationFn: (credentials: LoginCredentials) =>
-      apiCall<LoginResponse>("POST", "/auth/login", credentials),
+      apiCall<LoginResponse>("POST", "/auth/login", credentials, {
+        headers: {
+          'Accept-Language': i18n.language
+        }
+      }),
     onSuccess: (data) => {
       localStorage.setItem("access_token", data.access_token);
       localStorage.setItem("refresh_token", data.refresh_token);
-      navigate("/dashboard");
+      navigate(`/${i18n.language}/dashboard`);
     },
   });
 

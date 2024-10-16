@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { useTheme } from "../../contexts/ThemeContext";
 
 const ThemeToggle: React.FC = () => {
-  const { theme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
   const { t } = useTranslation();
 
   const themeOptions = [

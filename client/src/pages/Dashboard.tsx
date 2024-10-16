@@ -16,7 +16,6 @@ const Dashboard: React.FC = () => {
         <Breadcrumbs currentPath={currentPath} />
         <main className="flex-grow overflow-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h1 className="text-2xl font-semibold mb-4">Welcome to Your Kanban Board</h1>
             <KanbanBoard />
           </div>
         </main>

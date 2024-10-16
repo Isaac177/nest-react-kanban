@@ -1,43 +1,47 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Package2, Home, FileText, Archive, Settings, LogOut } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useLanguage } from "../../contexts/LanguageContext.tsx";
 
 const Sidebar: React.FC = () => {
-  const navItems = [
-    { name: 'Dashboard', icon: Home, href: '/dashboard' },
-    { name: 'Notes', icon: FileText, href: '/notes' },
-    { name: 'Archived', icon: Archive, href: '/archived' },
-    { name: 'Settings', icon: Settings, href: '/settings' },
-  ];
-
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const navItems = [
+    { name: t('sidebar.dashboard'), icon: Home, href: '/dashboard' },
+    { name: t('sidebar.notes'), icon: FileText, href: '/notes' },
+    { name: t('sidebar.archived'), icon: Archive, href: '/archived' },
+    { name: t('sidebar.settings'), icon: Settings, href: '/settings' },
+  ];
 
   const currentPath = location.pathname;
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    navigate('/login');
+    navigate(`/${language}/login`);
   };
 
   return (
     <nav className="flex flex-col items-center gap-4 px-2 py-5 border-r h-screen">
       <a
-        href="/dashboard"
+        href={`/${language}/dashboard`}
         className="group flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground"
       >
         <Package2 className="h-6 w-6 transition-all group-hover:scale-110" />
-        <span className="sr-only">Kanban Notes</span>
+        <span className="sr-only">{t('sidebar.appName')}</span>
       </a>
       {navItems.map((item) => (
         <Tooltip key={item.href}>
           <TooltipTrigger asChild>
             <a
-              href={item.href}
+              href={`/${language}${item.href}`}
               className={`flex h-12 w-12 items-center justify-center rounded-lg transition-colors hover:text-foreground ${
-                currentPath === item.href
+                currentPath === `/${language}${item.href}`
                   ? 'bg-accent text-accent-foreground'
                   : 'text-muted-foreground'
               }`}
@@ -56,10 +60,10 @@ const Sidebar: React.FC = () => {
             onClick={handleLogout}
           >
             <LogOut className="h-6 w-6" />
-            <span className="sr-only">Logout</span>
+            <span className="sr-only">{t('sidebar.logout')}</span>
           </button>
         </TooltipTrigger>
-        <TooltipContent side="right">Logout</TooltipContent>
+        <TooltipContent side="right">{t('sidebar.logout')}</TooltipContent>
       </Tooltip>
     </nav>
   );

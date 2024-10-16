@@ -19,6 +19,7 @@ import {
 import DOMPurify from 'dompurify';
 import { useCreateNote } from "../../hooks/useCreateNote";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 interface CreateNoteModalProps {
   isOpen: boolean;
@@ -32,7 +33,7 @@ const CreateNoteModal: React.FC<CreateNoteModalProps> = ({ isOpen, onClose }) =>
   const [tags, setTags] = useState('');
   const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
   const [priority, setPriority] = useState('3');
-
+  const { t } = useTranslation();
   const { createNote, isLoading, isError, error } = useCreateNote();
 
   const sanitizeInput = (input: string): string => {
@@ -69,16 +70,16 @@ const CreateNoteModal: React.FC<CreateNoteModalProps> = ({ isOpen, onClose }) =>
     <Dialog open={isOpen} onOpenChange={isLoading ? undefined : onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create New Note</DialogTitle>
+          <DialogTitle>{t('createNoteModal.title')}</DialogTitle>
           <DialogDescription>
-            Enter the details for your new note below.
+            {t('createNoteModal.description')}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="title" className="text-right">
-                Title
+                {t('createNoteModal.titleLabel')}
               </Label>
               <Input
                 id="title"
@@ -153,30 +154,30 @@ const CreateNoteModal: React.FC<CreateNoteModalProps> = ({ isOpen, onClose }) =>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="priority" className="text-right">
-                Priority
+                {t('createNoteModal.priorityLabel')}
               </Label>
               <Select onValueChange={setPriority} defaultValue={priority}>
                 <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select priority" />
+                  <SelectValue placeholder={t('createNoteModal.selectPriority')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">1 (Lowest)</SelectItem>
+                  <SelectItem value="1">{t('createNoteModal.lowestPriority')}</SelectItem>
                   <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="3">3 (Medium)</SelectItem>
+                  <SelectItem value="3">{t('createNoteModal.mediumPriority')}</SelectItem>
                   <SelectItem value="4">4</SelectItem>
-                  <SelectItem value="5">5 (Highest)</SelectItem>
+                  <SelectItem value="5">{t('createNoteModal.highestPriority')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           {isError && (
             <p className="text-sm text-red-500 mt-2">
-              Error: {error?.message || 'Failed to create note'}
+              {t('common.error')}: {error?.message || t('createNoteModal.failedToCreate')}
             </p>
           )}
           <DialogFooter>
             <Button type="submit" disabled={!title.trim() || !content.trim() || isLoading}>
-              {isLoading ? 'Creating...' : 'Create Note'}
+              {isLoading ? t('common.creating') : t('createNoteModal.createButton')}
             </Button>
           </DialogFooter>
         </form>

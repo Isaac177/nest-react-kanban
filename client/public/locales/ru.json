@@ -1,4 +1,12 @@
 {
+
+  "common": {
+    "error": "Ошибка",
+    "creating": "Создание...",
+    "deleting": "Удаление...",
+    "cancel": "Отмена",
+    "delete": "Удалить"
+  },
   "auth": {
     "welcome": "Добро пожаловать в NoteKeeper",
     "signInDescription": "Войдите, чтобы получить доступ к своим заметкам",
@@ -49,5 +57,96 @@
   "Dark": "Темная",
   "System": "Системная",
   "Toggle theme": "Переключить тему"
-}
+},
+
+  "createNoteModal": {
+    "title": "Создать новую заметку",
+    "description": "Введите данные для новой заметки ниже.",
+    "titleLabel": "Заголовок",
+    "contentLabel": "Содержание",
+    "columnLabel": "Колонка",
+    "selectColumn": "Выберите колонку",
+    "toDo": "Сделать",
+    "inProgress": "В процессе",
+    "done": "Сделано",
+    "tagsLabel": "Теги",
+    "tagsPlaceholder": "Теги через запятую",
+    "dueDateLabel": "Срок",
+    "pickDate": "Выберите дату",
+    "priorityLabel": "Приоритет",
+    "selectPriority": "Выберите приоритет",
+    "lowestPriority": "1 (Низкий)",
+    "mediumPriority": "3 (Средний)",
+    "highestPriority": "5 (Высокий)",
+    "failedToCreate": "Не удалось создать заметку",
+    "createButton": "Создать заметку",
+    "successMessage": "Заметка успешно создана"
+  },
+  "breadcrumbs": {
+    "dashboard": "Панель управления",
+    "notes": "Зам��тки",
+    "tasks": "Задачи",
+    "projects": "Проекты"
+  },
+  "deleteNoteModal": {
+    "title": "Подтвердите удаление",
+    "description": "Вы уверены, что хотите удалить эту заметку? Это действие нельзя отменить.",
+    "failedToDelete": "Не удалось удалить заметку",
+    "successMessage": "Заметка успешно удалена"
+  },
+  "noteModal": {
+    "createTitle": "Создать новую заметку",
+    "editTitle": "Редактировать заметку",
+    "createDescription": "Введите данные для новой заметки ниже.",
+    "editDescription": "Обновите данные вашей заметки ниже.",
+    "titleLabel": "Заголовок",
+    "contentLabel": "Содержание",
+    "columnLabel": "Колонка",
+    "selectColumn": "Выберите колонку",
+    "toDo": "Сделать",
+    "inProgress": "В процессе",
+    "done": "Сделано",
+    "tagsLabel": "Теги",
+    "tagsPlaceholder": "Теги через запятую",
+    "dueDateLabel": "Срок",
+    "pickDate": "Выберите дату",
+    "priorityLabel": "Приоритет",
+    "selectPriority": "��ыберите приоритет",
+    "lowestPriority": "1 (Низкий)",
+    "mediumPriority": "3 (Средний)",
+    "highestPriority": "5 (Высокий)",
+    "failedToSave": "Не удалось сохранить заметку",
+    "createButton": "Создать заметку",
+    "updateButton": "Обновить заметку"
+  },
+  "sidebar": {
+    "appName": "Kanban Заметки",
+    "dashboard": "Панель управления",
+    "notes": "Заметки",
+    "archived": "Архив",
+    "settings": "Настройки",
+    "logout": "Выйти"
+  },
+  "kanban": {
+    "toDo": "Сделать",
+    "inProgress": "В процессе",
+    "done": "Сделано"
+  },
+
+
+  "sortableNote": {
+    "edit": "Редактировать",
+    "delete": "Удалить"
+  },
+  "topBar": {
+    "dashboard": "Панель управления",
+    "searchPlaceholder": "Поиск заметок...",
+    "newNote": "Новая заметка",
+    "toggleUserMenu": "Переключить меню пользователя",
+    "myAccount": "Мой аккаунт",
+    "settings": "Настройки",
+    "support": "Поддержка",
+    "logout": "Выйти"
+  }
+
 }

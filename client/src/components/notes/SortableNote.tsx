@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -20,6 +20,7 @@ interface SortableNoteProps {
 }
 
 export const SortableNote: React.FC<SortableNoteProps> = ({ note }) => {
+  const { t } = useTranslation();
   const {
     attributes,
     listeners,
@@ -63,11 +64,11 @@ export const SortableNote: React.FC<SortableNoteProps> = ({ note }) => {
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => setIsEditModalOpen(true)}>
                 <Edit3 className="mr-2 h-4 w-4" />
-                Edit
+                {t('sortableNote.edit')}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setIsDeleteModalOpen(true)}>
                 <Trash2 className="mr-2 h-4 w-4 text-red-500" />
-                <span className="text-red-500">Delete</span>
+                <span className="text-red-500">{t('sortableNote.delete')}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -1,6 +1,5 @@
-// components/DeleteNoteModal.tsx
-
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -20,12 +19,13 @@ interface DeleteNoteModalProps {
 }
 
 const DeleteNoteModal: React.FC<DeleteNoteModalProps> = ({ isOpen, onClose, noteId }) => {
+  const { t } = useTranslation();
   const { deleteNote, isLoading, isError, error } = useDeleteNote();
 
   const handleDelete = () => {
     deleteNote(noteId, {
       onSuccess: () => {
-        toast.success('Note deleted successfully');
+        toast.success(t('deleteNoteModal.successMessage'));
         onClose();
       },
     });
@@ -35,22 +35,22 @@ const DeleteNoteModal: React.FC<DeleteNoteModalProps> = ({ isOpen, onClose, note
     <Dialog open={isOpen} onOpenChange={isLoading ? undefined : onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Confirm Deletion</DialogTitle>
+          <DialogTitle>{t('deleteNoteModal.title')}</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete this note? This action cannot be undone.
+            {t('deleteNoteModal.description')}
           </DialogDescription>
         </DialogHeader>
         {isError && (
           <p className="text-sm text-red-500 mt-2">
-            Error: {error?.message || 'Failed to delete note'}
+            {t('common.error')}: {error?.message || t('deleteNoteModal.failedToDelete')}
           </p>
         )}
         <DialogFooter>
           <Button variant="outline" onClick={onClose} disabled={isLoading}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="destructive" onClick={handleDelete} disabled={isLoading}>
-            {isLoading ? 'Deleting...' : 'Delete'}
+            {isLoading ? t('common.deleting') : t('common.delete')}
           </Button>
         </DialogFooter>
       </DialogContent>
