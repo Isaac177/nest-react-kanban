@@ -1,0 +1,38 @@
+{
+  "auth": {
+    "emailAlreadyExists": "Email already exists",
+    "registrationSuccessful": "User registered successfully. Please check your email to verify your account.",
+    "invalidVerificationToken": "Invalid verification token",
+    "emailVerified": "Email verified successfully",
+    "invalidCredentials": "Invalid email or password",
+    "emailNotVerified": "Please verify your email before logging in",
+    "loginSuccessful": "Login successful",
+    "tokenRefreshed": "Token refreshed successfully",
+    "invalidRefreshToken": "Invalid refresh token",
+    "userNotFound": "User not found",
+    "passwordResetInstructionsSent": "Password reset instructions sent to your email",
+    "invalidResetToken": "Invalid reset token",
+    "passwordResetSuccessful": "Password reset successfully",
+    "verifyEmailSubject": "Verify your email",
+    "verifyEmailBody": "Please click this link to verify your email: <a href=\"{{verificationLink}}\">{{verificationLink}}</a>",
+    "resetPasswordSubject": "Reset your password",
+    "resetPasswordBody": "Please click this link to reset your password: <a href=\"{{resetLink}}\">{{resetLink}}</a>"
+  },
+  "notes": {
+    "noteCreated": "Note created successfully",
+    "allNotesRetrieved": "All notes retrieved successfully",
+    "noteRetrieved": "Note retrieved successfully",
+    "noteUpdated": "Note updated successfully",
+    "noteDeleted": "Note deleted successfully",
+    "noteMoved": "Note moved successfully",
+    "noteArchived": "Note archived successfully",
+    "archivedNotesRetrieved": "Archived notes retrieved successfully",
+    "noteNotFound": "Note not found",
+    "transactionFailed": "Transaction failed after maximum retries"
+  },
+  "users": {
+    "userNotFound": "User not found",
+    "profileRetrieved": "User profile retrieved successfully",
+    "userRetrieved": "User retrieved successfully"
+  }
+}

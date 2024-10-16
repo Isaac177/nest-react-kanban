@@ -14,6 +14,8 @@ import {
 import CreateNoteModal from "./CreateNoteModal";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../../contexts/LanguageContext.tsx";
+import ThemeToggle from "../toggles/ThemeToggle.tsx";
+import LanguageToggle from "../toggles/LanguageToggle.tsx";
 
 const TopBar: React.FC = () => {
   const { t } = useTranslation();
@@ -42,8 +44,8 @@ const TopBar: React.FC = () => {
 
   return (
     <>
-      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-20">
-        <div className="flex w-full items-center gap-4 md:gap-2 lg:gap-4">
+      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-8 md:px-6 z-20">
+        <div className="flex w-full items-center gap-4 md:gap-2 lg:gap-4 py-8">
           <div className="mr-auto text-3xl font-semibold">
             {getCurrentTabTitle()}
           </div>
@@ -60,6 +62,8 @@ const TopBar: React.FC = () => {
               />
             </div>
           </form>
+          <ThemeToggle />
+          <LanguageToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">

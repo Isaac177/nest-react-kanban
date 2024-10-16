@@ -4,11 +4,14 @@ import { Model } from 'mongoose';
 import { Note, NoteDocument } from './schemas/note.schema';
 import { CreateNoteDto, UpdateNoteDto, MoveNoteDto } from './dto/note.dto';
 import { MongoServerError } from 'mongodb';
-
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class NotesService {
-  constructor(@InjectModel(Note.name) private noteModel: Model<NoteDocument>) {}
+  constructor(
+    @InjectModel(Note.name) private noteModel: Model<NoteDocument>,
+    private readonly i18n: I18nService
+  ) {}
 
   async create(createNoteDto: CreateNoteDto, userId: string): Promise<Note> {
     const lastNote = await this.noteModel
@@ -35,7 +38,7 @@ export class NotesService {
   async findOne(id: string, userId: string): Promise<Note> {
     const note = await this.noteModel.findOne({ _id: id, user: userId }).exec();
     if (!note) {
-      throw new NotFoundException('Note not found');
+      throw new NotFoundException(await this.i18n.translate('notes.noteNotFound'));
     }
     return note;
   }
@@ -49,7 +52,7 @@ export class NotesService {
       .findOneAndUpdate({ _id: id, user: userId }, updateNoteDto, { new: true })
       .exec();
     if (!note) {
-      throw new NotFoundException('Note not found');
+      throw new NotFoundException(await this.i18n.translate('notes.noteNotFound'));
     }
     return note;
   }
@@ -59,7 +62,7 @@ export class NotesService {
       .deleteOne({ _id: id, user: userId })
       .exec();
     if (result.deletedCount === 0) {
-      throw new NotFoundException('Note not found');
+      throw new NotFoundException(await this.i18n.translate('notes.noteNotFound'));
     }
   }
 
@@ -80,7 +83,7 @@ export class NotesService {
           .findOne({ _id: id, user: userId })
           .session(session);
         if (!note) {
-          throw new NotFoundException('Note not found');
+          throw new NotFoundException(await this.i18n.translate('notes.noteNotFound'));
         }
 
         const oldColumn = note.column;
@@ -159,7 +162,7 @@ export class NotesService {
       }
     }
 
-    throw new Error('Transaction failed after maximum retries');
+    throw new Error(await this.i18n.translate('notes.transactionFailed'));
   }
 
   async archiveNote(id: string, userId: string): Promise<Note> {
@@ -171,7 +174,7 @@ export class NotesService {
       )
       .exec();
     if (!note) {
-      throw new NotFoundException('Note not found');
+      throw new NotFoundException(await this.i18n.translate('notes.noteNotFound'));
     }
     return note;
   }

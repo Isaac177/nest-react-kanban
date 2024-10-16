@@ -7,7 +7,7 @@ export type UserDocument = User & Document;
   timestamps: true,
   toJSON: {
     virtuals: true,
-    transform: (doc, ret) => {
+    transform: (_, ret) => {
       ret.id = ret._id.toString();
       delete ret._id;
       delete ret.__v;
@@ -18,19 +18,19 @@ export type UserDocument = User & Document;
 })
 export class User {
   @Prop({ type: SchemaTypes.ObjectId, auto: true })
-  _id: string;
+  _id!: string;
 
   @Prop({ required: true, unique: true })
-  username: string;
+  username!: string;
 
   @Prop({ required: true, unique: true })
-  email: string;
+  email!: string;
 
   @Prop({ required: true })
-  password: string;
+  password!: string;
 
   @Prop({ default: false })
-  isVerified: boolean;
+  isVerified!: boolean;
 
   @Prop()
   verificationToken?: string;

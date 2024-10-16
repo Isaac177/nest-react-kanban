@@ -1,0 +1,39 @@
+{
+  "auth": {
+    "emailAlreadyExists": "Бұл email тіркелген",
+    "registrationSuccessful": "Пайдаланушы сәтті тіркелді. Аккаунтыңызды растау үшін электрондық поштаңызды тексеріңіз.",
+    "invalidVerificationToken": "Жарамсыз растау токені",
+    "emailVerified": "Email сәтті расталды",
+    "invalidCredentials": "Қате email немесе құпия сөз",
+    "emailNotVerified": "Кіру алдында emailіңізді растаңыз",
+    "loginSuccessful": "Жүйеге сәтті кірдіңіз",
+    "tokenRefreshed": "Токен сәтті жаңартылды",
+    "invalidRefreshToken": "Жарамсыз жаңарту токені",
+    "userNotFound": "Пайдаланушы табылмады",
+    "passwordResetInstructionsSent": "Құпия сөзді қалпына келтіру нұсқаулары сіздің emailіңізге жіберілді",
+    "invalidResetToken": "Жарамсыз қалпына келтіру токені",
+    "passwordResetSuccessful": "Құпия сөз сәтті қалпына келтірілді",
+    "verifyEmailSubject": "Emailіңізді растаңыз",
+    "verifyEmailBody": "Emailіңізді растау үшін осы сілтемені басыңыз: <a href=\"{{verificationLink}}\">{{verificationLink}}</a>",
+    "resetPasswordSubject": "Құпия сөзді қалпына келтіру",
+    "resetPasswordBody": "Құпия сөзіңізді қалпына келтіру үшін осы сілтемені басыңыз: <a href=\"{{resetLink}}\">{{resetLink}}</a>"
+  },
+
+  "notes": {
+    "noteCreated": "Жазба сәтті жасалды",
+    "allNotesRetrieved": "Барлық жазбалар сәтті алынды",
+    "noteRetrieved": "Жазба сәтті алынды",
+    "noteUpdated": "Жазба сәтті жаңартылды",
+    "noteDeleted": "Жазба сәтті жойылды",
+    "noteMoved": "Жазба сәтті жылжытылды",
+    "noteArchived": "Жазба сәтті мұрағатталды",
+    "archivedNotesRetrieved": "Мұрағатталған жазбалар сәтті алынды",
+    "noteNotFound": "Жазба табылмады",
+    "transactionFailed": "Транзакция максималды әрекеттер санынан кейін сәтсіз аяқталды"
+  },
+  "users": {
+    "userNotFound": "Пайдаланушы табылмады",
+    "profileRetrieved": "Пайдаланушы профилі сәтті алынды",
+    "userRetrieved": "Пайдаланушы туралы ақпарат сәтті алынды"
+  }
+}

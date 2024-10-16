@@ -5,7 +5,7 @@ import Breadcrumbs from "../components/notes/Breadcrumbs";
 import KanbanBoard from "../components/notes/KanbanBoard.tsx";
 
 const Dashboard: React.FC = () => {
-  const [currentPath, setCurrentPath] = useState('/dashboard');
+  const [currentPath] = useState('/dashboard');
 
 
   return (

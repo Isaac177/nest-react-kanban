@@ -1,0 +1,38 @@
+{
+  "auth": {
+    "emailAlreadyExists": "Такой email уже существует",
+    "registrationSuccessful": "Пользователь успешно зарегистрирован. Пожалуйста, проверьте свою электронную почту для подтверждения аккаунта.",
+    "invalidVerificationToken": "Неверный токен подтверждения",
+    "emailVerified": "Email успешно подтвержден",
+    "invalidCredentials": "Неверный email или пароль",
+    "emailNotVerified": "Пожалуйста, подтвердите свой email перед входом",
+    "loginSuccessful": "Вход выполнен успешно",
+    "tokenRefreshed": "Токен успешно обновлен",
+    "invalidRefreshToken": "Неверный токен обновления",
+    "userNotFound": "Пользователь не найден",
+    "passwordResetInstructionsSent": "Инструкции по сбросу пароля отправлены на ваш email",
+    "invalidResetToken": "Неверный токен сброса пароля",
+    "passwordResetSuccessful": "Пароль успешно сброшен",
+    "verifyEmailSubject": "Подтвердите ваш email",
+    "verifyEmailBody": "Пожалуйста, нажмите на эту ссылку для подтверждения вашего email: <a href=\"{{verificationLink}}\">{{verificationLink}}</a>",
+    "resetPasswordSubject": "Сброс пароля",
+    "resetPasswordBody": "Пожалуйста, нажмите на эту ссылку для сброса вашего пароля: <a href=\"{{resetLink}}\">{{resetLink}}</a>"
+  },
+  "notes": {
+    "noteCreated": "Заметка успешно создана",
+    "allNotesRetrieved": "Все заметки успешно получены",
+    "noteRetrieved": "Заметка успешно получена",
+    "noteUpdated": "Заметка успешно обновлена",
+    "noteDeleted": "Заметка успешно удалена",
+    "noteMoved": "Заметка успешно перемещена",
+    "noteArchived": "Заметка успешно архивирована",
+    "archivedNotesRetrieved": "Архивированные заметки успешно получены",
+    "noteNotFound": "Заметка не найдена",
+    "transactionFailed": "Транзакция не удалась после максимального количества попыток"
+  },
+  "users": {
+    "userNotFound": "Пользователь не найден",
+    "profileRetrieved": "Профиль пользователя успешно получен",
+    "userRetrieved": "Информация о пользователе успешно получена"
+  }
+}

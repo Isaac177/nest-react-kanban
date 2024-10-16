@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { createPortal } from "react-dom";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
 import LoadingBar from "react-top-loading-bar";
 import {
   DndContext,
@@ -21,8 +20,15 @@ import { SortableNote } from './SortableNote';
 import { apiCall } from "../../utils/apiCall";
 import { Note } from "../../types/note";
 
+interface NotesApiResponse {
+  message: string;
+  notes: Note[];
+}
+
+
 const KanbanBoard: React.FC = () => {
-  const { t } = useTranslation();
+  console.log('KanbanBoard component is rendering');
+
   const [notes, setNotes] = useState<Note[]>([]);
   const [activeNote, setActiveNote] = useState<Note | null>(null);
   const [progress, setProgress] = useState(0);
@@ -30,14 +36,18 @@ const KanbanBoard: React.FC = () => {
   const queryClient = useQueryClient();
 
   const defaultColumns: { id: Note['column']; title: string }[] = [
-    { id: 'To Do', title: t('kanban.toDo') },
-    { id: 'In Progress', title: t('kanban.inProgress') },
-    { id: 'Done', title: t('kanban.done') },
+    { id: 'To Do', title: 'To Do' },
+    { id: 'In Progress', title: 'In Progress' },
+    { id: 'Done', title: 'Done' },
   ];
 
-  const { data: fetchedNotes, isLoading, error } = useQuery<Note[]>({
+  const { data: fetchedNotesResponse = {} as NotesApiResponse, isLoading, error } = useQuery<NotesApiResponse>({
     queryKey: ['notes'],
-    queryFn: () => apiCall('GET', '/notes')
+    queryFn: async () => {
+      const response = await apiCall<NotesApiResponse>('GET', '/notes');
+      console.log('API response:', response);
+      return response;
+    },
   });
 
   useEffect(() => {
@@ -49,10 +59,10 @@ const KanbanBoard: React.FC = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    if (fetchedNotes) {
-      setNotes(fetchedNotes);
-    }
-  }, [fetchedNotes]);
+    const fetchedNotes = fetchedNotesResponse?.notes ?? [];
+    console.log('fetchedNotes:', JSON.stringify(fetchedNotes, null, 2));
+    setNotes(fetchedNotes);
+  }, [fetchedNotesResponse]);
 
   const updateNoteMutation = useMutation({
     mutationFn: ({ id, column, order }: { id: string; column: Note['column']; order: number }) =>
@@ -73,9 +83,11 @@ const KanbanBoard: React.FC = () => {
       'In Progress': [],
       'Done': [],
     };
+
     notes.forEach(note => {
       mapping[note.column].push(note);
     });
+
     return mapping;
   }, [notes]);
 
@@ -158,7 +170,7 @@ const KanbanBoard: React.FC = () => {
           const activeIndex = prevNotes.findIndex(note => note.id === activeNoteId);
           const overIndex = prevNotes.findIndex(note => note.id === overNote.id);
 
-          let newNotes = [...prevNotes];
+          const newNotes = [...prevNotes];
 
           newNotes.splice(activeIndex, 1);
 
@@ -190,7 +202,7 @@ const KanbanBoard: React.FC = () => {
     return ['To Do', 'In Progress', 'Done'].includes(id);
   };
 
-  if (error instanceof Error) return <div>{t('common.error')}: {error.message}</div>;
+  if (error instanceof Error) return <div>Error: {error.message}</div>;
 
   return (
     <>

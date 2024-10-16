@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private i18n: I18nService,
   ) {
     this.transporter = nodemailer.createTransport({
       host: this.configService.get('SMTP_HOST'),
@@ -33,7 +35,7 @@ export class AuthService {
   async register(username: string, email: string, password: string) {
     const existingUser = await this.usersService.findByEmail(email);
     if (existingUser) {
-      throw new ConflictException('Email already exists');
+      throw new ConflictException(await this.i18n.translate('auth.emailAlreadyExists'));
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -47,30 +49,29 @@ export class AuthService {
     //await this.sendVerificationEmail(email, verificationToken);
 
     return {
-      message:
-        'User registered successfully. Please check your email to verify your account.',
+      message: await this.i18n.translate('auth.registrationSuccessful'),
     };
   }
 
   async verifyEmail(token: string) {
     const user = await this.usersService.findByVerificationToken(token);
     if (!user) {
-      throw new BadRequestException('Invalid verification token');
+      throw new BadRequestException(await this.i18n.translate('auth.invalidVerificationToken'));
     }
 
     await this.usersService.verifyUser(user._id.toString());
-    return { message: 'Email verified successfully' };
+    return { message: await this.i18n.translate('auth.emailVerified') };
   }
 
   async login(email: string, password: string) {
     const user = await this.usersService.findByEmail(email);
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException(await this.i18n.translate('auth.invalidCredentials'));
     }
 
     /*if (!user.isVerified) {
       throw new UnauthorizedException(
-        'Please verify your email before logging in',
+        await this.i18n.translate('auth.emailNotVerified')
       );
     }*/
 
@@ -87,7 +88,7 @@ export class AuthService {
       const user = await this.usersService.findById(payload.sub);
 
       if (!user) {
-        throw new UnauthorizedException('Invalid refresh token');
+        throw new UnauthorizedException(await this.i18n.translate('auth.invalidRefreshToken'));
       }
 
       const newPayload = { email: user.email, sub: user._id.toString() };
@@ -95,14 +96,14 @@ export class AuthService {
         access_token: this.jwtService.sign(newPayload, { expiresIn: '15m' }),
       };
     } catch (error) {
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException(await this.i18n.translate('auth.invalidRefreshToken'));
     }
   }
 
   async forgotPassword(email: string) {
     const user = await this.usersService.findByEmail(email);
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new BadRequestException(await this.i18n.translate('auth.userNotFound'));
     }
 
     const resetToken = uuidv4();
@@ -110,19 +111,19 @@ export class AuthService {
 
     await this.sendPasswordResetEmail(email, resetToken);
 
-    return { message: 'Password reset instructions sent to your email' };
+    return { message: await this.i18n.translate('auth.passwordResetInstructionsSent') };
   }
 
   async resetPassword(token: string, newPassword: string) {
     const user = await this.usersService.findByResetToken(token);
     if (!user) {
-      throw new BadRequestException('Invalid reset token');
+      throw new BadRequestException(await this.i18n.translate('auth.invalidResetToken'));
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await this.usersService.resetPassword(user._id.toString(), hashedPassword);
 
-    return { message: 'Password reset successfully' };
+    return { message: await this.i18n.translate('auth.passwordResetSuccessful') };
   }
 
   private async sendVerificationEmail(email: string, token: string) {
@@ -131,8 +132,8 @@ export class AuthService {
     await this.transporter.sendMail({
       from: this.configService.get('EMAIL_FROM'),
       to: email,
-      subject: 'Verify your email',
-      html: `Please click this link to verify your email: <a href="${verificationLink}">${verificationLink}</a>`,
+      subject: await this.i18n.translate('auth.verifyEmailSubject'),
+      html: await this.i18n.translate('auth.verifyEmailBody', { args: { verificationLink } }),
     });
   }
 
@@ -142,8 +143,8 @@ export class AuthService {
     await this.transporter.sendMail({
       from: this.configService.get('EMAIL_FROM'),
       to: email,
-      subject: 'Reset your password',
-      html: `Please click this link to reset your password: <a href="${resetLink}">${resetLink}</a>`,
+      subject: await this.i18n.translate('auth.resetPasswordSubject'),
+      html: await this.i18n.translate('auth.resetPasswordBody', { args: { resetLink } }),
     });
   }
 }

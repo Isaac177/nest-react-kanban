@@ -26,10 +26,12 @@ interface CreateNoteModalProps {
   onClose: () => void;
 }
 
+type ColumnType = "To Do" | "In Progress" | "Done";
+
 const CreateNoteModal: React.FC<CreateNoteModalProps> = ({ isOpen, onClose }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [column, setColumn] = useState('To Do');
+  const [column, setColumn] = useState<ColumnType>("To Do");
   const [tags, setTags] = useState('');
   const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
   const [priority, setPriority] = useState('3');
@@ -64,6 +66,10 @@ const CreateNoteModal: React.FC<CreateNoteModalProps> = ({ isOpen, onClose }) =>
         },
       });
     }
+  };
+
+  const handleColumnChange = (value: ColumnType) => {
+    setColumn(value);
   };
 
   return (
@@ -105,7 +111,7 @@ const CreateNoteModal: React.FC<CreateNoteModalProps> = ({ isOpen, onClose }) =>
               <Label htmlFor="column" className="text-right">
                 Column
               </Label>
-              <Select onValueChange={setColumn} defaultValue={column}>
+              <Select onValueChange={handleColumnChange} defaultValue={column}>
                 <SelectTrigger className="col-span-3">
                   <SelectValue placeholder="Select a column" />
                 </SelectTrigger>

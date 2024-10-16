@@ -2,10 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private readonly i18n: I18nService
+  ) {}
 
   async create(
     username: string,
@@ -54,7 +58,7 @@ export class UsersService {
   async verifyUser(id: string): Promise<User> {
     const user = await this.userModel.findById(new Types.ObjectId(id));
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(await this.i18n.translate('users.userNotFound'));
     }
     user.isVerified = true;
     user.verificationToken = undefined;
@@ -64,17 +68,17 @@ export class UsersService {
   async setResetToken(id: string, token: string): Promise<User> {
     const user = await this.userModel.findById(new Types.ObjectId(id));
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(await this.i18n.translate('users.userNotFound'));
     }
     user.resetPasswordToken = token;
-    user.resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hour
+    user.resetPasswordExpires = new Date(Date.now() + 3600000);
     return user.save();
   }
 
   async resetPassword(id: string, hashedPassword: string): Promise<User> {
     const user = await this.userModel.findById(new Types.ObjectId(id));
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(await this.i18n.translate('users.userNotFound'));
     }
     user.password = hashedPassword;
     user.resetPasswordToken = undefined;
@@ -82,5 +86,3 @@ export class UsersService {
     return user.save();
   }
 }
-
-

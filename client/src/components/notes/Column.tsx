@@ -5,7 +5,9 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { SortableNote } from './SortableNote';
 import { Note } from "../../types/note.ts";
 
+
 interface ColumnProps {
+  id: Note['column'];
   title: string;
   notes: Note[];
 }

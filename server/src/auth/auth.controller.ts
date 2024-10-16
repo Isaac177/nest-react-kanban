@@ -13,47 +13,79 @@ import { LoginDto } from './dto/LoginDto';
 import { RefreshTokenDto } from './dto/RefreshTokenDto';
 import { ForgotPasswordDto } from './dto/ForgotPasswordDto';
 import { ResetPasswordDto } from './dto/ResetPasswordDto';
+import { I18nService } from 'nestjs-i18n';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private i18n: I18nService,
+  ) {}
 
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
-    return this.authService.register(
+    const result = await this.authService.register(
       registerDto.username,
       registerDto.email,
       registerDto.password,
     );
+    return {
+      ...result,
+      message: await this.i18n.translate('auth.registrationSuccessful'),
+    };
   }
 
   @Post('verify-email')
   async verifyEmail(@Query() verifyEmailDto: VerifyEmailDto) {
-    return this.authService.verifyEmail(verifyEmailDto.token);
+    await this.authService.verifyEmail(verifyEmailDto.token);
+    return {
+      message: await this.i18n.translate('auth.emailVerified'),
+    };
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto.email, loginDto.password);
+    const result = await this.authService.login(
+      loginDto.email,
+      loginDto.password,
+    );
+    return {
+      ...result,
+      message: await this.i18n.translate('auth.loginSuccessful'),
+    };
   }
 
   @Post('refresh-token')
   @HttpCode(HttpStatus.OK)
   async refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
-    return this.authService.refreshToken(refreshTokenDto.refreshToken);
+    const result = await this.authService.refreshToken(
+      refreshTokenDto.refreshToken,
+    );
+    return {
+      ...result,
+      message: await this.i18n.translate('auth.tokenRefreshed'),
+    };
   }
 
   @Post('forgot-password')
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
-    return this.authService.forgotPassword(forgotPasswordDto.email);
+    await this.authService.forgotPassword(forgotPasswordDto.email);
+    return {
+      message: await this.i18n.translate(
+        'auth.passwordResetInstructionsSent',
+      ),
+    };
   }
 
   @Post('reset-password')
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
-    return this.authService.resetPassword(
+    await this.authService.resetPassword(
       resetPasswordDto.token,
       resetPasswordDto.newPassword,
     );
+    return {
+      message: await this.i18n.translate('auth.passwordResetSuccessful'),
+    };
   }
 }

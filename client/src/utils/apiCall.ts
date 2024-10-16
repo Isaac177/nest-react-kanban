@@ -1,5 +1,4 @@
-// utils/apiCall.ts
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import i18next from "i18next";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
@@ -21,7 +20,7 @@ const processQueue = (error: AxiosError | null, token: string | null = null) => 
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
-    } else if (token) {
+    } else {
       prom.resolve(token);
     }
   });
@@ -42,11 +41,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config as any;
+    const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
 
     if (error.response?.status === 401 && !originalRequest._retry) {
-      if (originalRequest.url.includes('/auth/refresh-token')) {
-        // If refresh token request failed, logout the user
+      if (originalRequest.url?.includes('/auth/refresh-token')) {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         window.location.href = '/login';
@@ -109,9 +107,12 @@ api.interceptors.response.use(
   }
 );
 
-export const apiCall = async <T>(method: string, url: string, data?: any, config?: {
-  headers?: Record<string, string>;
-}): Promise<T> => {
+export const apiCall = async <T, D = unknown>(
+  method: string,
+  url: string,
+  data?: D,
+  config?: { headers?: Record<string, string> }
+): Promise<T> => {
   try {
     const headers = {
       'Accept-Language': i18next.language,
@@ -124,6 +125,7 @@ export const apiCall = async <T>(method: string, url: string, data?: any, config
       data,
       headers,
     });
+
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -132,3 +134,4 @@ export const apiCall = async <T>(method: string, url: string, data?: any, config
     throw new Error('An unexpected error occurred');
   }
 };
+

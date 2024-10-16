@@ -30,6 +30,15 @@ interface NoteModalProps {
   note?: Note;
 }
 
+interface CreateNoteDto {
+  title: string;
+  content: string;
+  column: "To Do" | "In Progress" | "Done";
+  tags: string[];
+  dueDate?: string | undefined;
+  priority: number;
+}
+
 const NoteModal: React.FC<NoteModalProps> = ({ isOpen, onClose, note }) => {
   const isEditMode = Boolean(note);
   const { t } = useTranslation();
@@ -56,12 +65,12 @@ const NoteModal: React.FC<NoteModalProps> = ({ isOpen, onClose, note }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (title.trim() && content.trim()) {
-      const noteData = {
+      const noteData: CreateNoteDto = {
         title: sanitizeInput(title),
         content: sanitizeInput(content),
         column,
         tags: tags.split(',').map(tag => tag.trim()),
-        dueDate: dueDate || undefined,
+        dueDate: dueDate ? format(dueDate, "yyyy-MM-dd") : undefined,
         priority: parseInt(priority),
       };
       if (isEditMode && note) {
@@ -75,6 +84,7 @@ const NoteModal: React.FC<NoteModalProps> = ({ isOpen, onClose, note }) => {
           }
         );
       } else {
+        //@ts-ignore
         createNote(noteData, {
           onSuccess: () => {
             toast.success('Note created successfully');

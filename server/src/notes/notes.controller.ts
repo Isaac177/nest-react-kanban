@@ -10,60 +10,127 @@ import {
   Req,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
-import { CreateNoteDto, UpdateNoteDto, MoveNoteDto } from './dto/note.dto';
+import {
+  CreateNoteDto,
+  UpdateNoteDto,
+  MoveNoteDto,
+} from './dto/note.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Request } from 'express';
+import { I18nService } from 'nestjs-i18n';
+import { AuthenticatedRequest } from '../auth/interfaces/authenticated-request.interface';
 
 @Controller('notes')
 @UseGuards(JwtAuthGuard)
 export class NotesController {
-  constructor(private readonly notesService: NotesService) {}
+  constructor(
+    private readonly notesService: NotesService,
+    private readonly i18n: I18nService,
+  ) {}
 
   @Post()
-  create(@Body() createNoteDto: CreateNoteDto, @Req() req: Request) {
-    return this.notesService.create(createNoteDto, req.user['userId']);
+  async create(
+    @Body() createNoteDto: CreateNoteDto,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    const note = await this.notesService.create(
+      createNoteDto,
+      req.user.userId,
+    );
+    return {
+      message: await this.i18n.translate('notes.noteCreated'),
+      note,
+    };
   }
 
   @Get()
-  findAll(@Req() req: Request) {
-    return this.notesService.findAll(req.user['userId']);
+  async findAll(@Req() req: AuthenticatedRequest) {
+    const notes = await this.notesService.findAll(req.user.userId);
+    return {
+      message: await this.i18n.translate('notes.allNotesRetrieved'),
+      notes,
+    };
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @Req() req: Request) {
-    return this.notesService.findOne(id, req.user['userId']);
+  async findOne(
+    @Param('id') id: string,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    const note = await this.notesService.findOne(id, req.user.userId);
+    return {
+      message: await this.i18n.translate('notes.noteRetrieved'),
+      note,
+    };
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateNoteDto: UpdateNoteDto,
-    @Req() req: Request,
+    @Req() req: AuthenticatedRequest,
   ) {
-    return this.notesService.update(id, updateNoteDto, req.user['userId']);
+    const note = await this.notesService.update(
+      id,
+      updateNoteDto,
+      req.user.userId,
+    );
+    return {
+      message: await this.i18n.translate('notes.noteUpdated'),
+      note,
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @Req() req: Request) {
-    return this.notesService.remove(id, req.user['userId']);
+  async remove(
+    @Param('id') id: string,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    await this.notesService.remove(id, req.user.userId);
+    return {
+      message: await this.i18n.translate('notes.noteDeleted'),
+    };
   }
 
   @Patch(':id/move')
-  moveNote(
+  async moveNote(
     @Param('id') id: string,
     @Body() moveNoteDto: MoveNoteDto,
-    @Req() req: Request,
+    @Req() req: AuthenticatedRequest,
   ) {
-    return this.notesService.moveNote(id, moveNoteDto, req.user['userId']);
+    const note = await this.notesService.moveNote(
+      id,
+      moveNoteDto,
+      req.user.userId,
+    );
+    return {
+      message: await this.i18n.translate('notes.noteMoved'),
+      note,
+    };
   }
 
   @Patch(':id/archive')
-  archiveNote(@Param('id') id: string, @Req() req: Request) {
-    return this.notesService.archiveNote(id, req.user['userId']);
+  async archiveNote(
+    @Param('id') id: string,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    const note = await this.notesService.archiveNote(
+      id,
+      req.user.userId,
+    );
+    return {
+      message: await this.i18n.translate('notes.noteArchived'),
+      note,
+    };
   }
 
   @Get('archived')
-  getArchivedNotes(@Req() req: Request) {
-    return this.notesService.getArchivedNotes(req.user['userId']);
+  async getArchivedNotes(@Req() req: AuthenticatedRequest) {
+    const notes = await this.notesService.getArchivedNotes(
+      req.user.userId,
+    );
+    return {
+      message: await this.i18n.translate('notes.archivedNotesRetrieved'),
+      notes,
+    };
   }
 }
