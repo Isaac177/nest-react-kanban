@@ -1,0 +1,153 @@
+{
+  "common": {
+    "error": "Error",
+    "creating": "Creating...",
+    "deleting": "Deleting...",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "auth": {
+    "welcome": "Welcome to NoteKeeper",
+    "signInDescription": "Sign in to access your notes",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "signIn": "Sign In",
+    "signingIn": "Signing In...",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "registerHere": "Register here",
+    "register": "Register",
+    "genericError": "An error occurred",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordTooShort": "Password must be at least 8 characters long",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "createAccount": "Create an Account",
+    "signUpDescription": "Sign up to start using NoteKeeper",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "signUp": "Sign Up",
+    "signingUp": "Signing Up...",
+    "haveAccount": "Already have an account?",
+    "signInHere": "Sign in here",
+    "usernameRequired": "Username is required",
+    "usernameTooShort": "Username must be at least 3 characters long",
+    "passwordsMismatch": "Passwords do not match",
+    "passwordComplexity": "Password must include uppercase, lowercase, number, and special character"
+  },
+
+  "quotes": {
+  "procrastination": "I'm not procrastinating, I'm prioritizing my panic. 😅😅",
+  "debugLife": "I debug my life the same way I debug my code: with a lot of coffee and confused staring. 😅😅😅",
+  "coffeeCode": "My code doesn't work? Better add more coffee! ☕️☕️☕️",
+  "featuresBugs": "It's not a bug, it's an undocumented feature! 🐛🐛",
+  "deadlineMotivation": "Deadlines are just suggestions... until they're not. 😬😬",
+  "backupRegret": "Always backup your files. You'll thank yourself later... or curse yourself if you don't. 😅😅",
+  "programmersOptimism": "Optimist programmer: The glass is half full... of bugs. 🐞🐞",
+  "codingSuperpowers": "With great coding power comes great googling responsibility. 💻💻",
+  "bugHiding": "I'm not hiding from my problems. I'm debugging my life in production. 🐛🐛",
+  "todoListParadox": "My todo list is like my code: it keeps growing and I'm afraid to delete anything. 📋📋"
+},
+
+"theme":{
+  "Light": "Light",
+  "Dark": "Dark",
+  "System": "System",
+  "Toggle theme": "Toggle theme"
+},
+
+
+  "createNoteModal": {
+    "title": "Create New Note",
+    "description": "Enter the details for your new note below.",
+    "titleLabel": "Title",
+    "contentLabel": "Content",
+    "columnLabel": "Column",
+    "selectColumn": "Select a column",
+    "toDo": "To Do",
+    "inProgress": "In Progress",
+    "done": "Done",
+    "tagsLabel": "Tags",
+    "tagsPlaceholder": "Comma-separated tags",
+    "dueDateLabel": "Due Date",
+    "pickDate": "Pick a date",
+    "priorityLabel": "Priority",
+    "selectPriority": "Select priority",
+    "lowestPriority": "1 (Lowest)",
+    "mediumPriority": "3 (Medium)",
+    "highestPriority": "5 (Highest)",
+    "failedToCreate": "Failed to create note",
+    "createButton": "Create Note",
+    "successMessage": "Note created successfully"
+  },
+  "breadcrumbs": {
+    "dashboard": "Dashboard",
+    "notes": "Notes",
+    "tasks": "Tasks",
+    "projects": "Projects"
+  },
+  "deleteNoteModal": {
+    "title": "Confirm Deletion",
+    "description": "Are you sure you want to delete this note? This action cannot be undone.",
+    "failedToDelete": "Failed to delete note",
+    "successMessage": "Note deleted successfully"
+  },
+  "noteModal": {
+    "createTitle": "Create New Note",
+    "editTitle": "Edit Note",
+    "createDescription": "Enter the details for your new note below.",
+    "editDescription": "Update the details of your note below.",
+    "titleLabel": "Title",
+    "contentLabel": "Content",
+    "columnLabel": "Column",
+    "selectColumn": "Select a column",
+    "toDo": "To Do",
+    "inProgress": "In Progress",
+    "done": "Done",
+    "tagsLabel": "Tags",
+    "tagsPlaceholder": "Comma-separated tags",
+    "dueDateLabel": "Due Date",
+    "pickDate": "Pick a date",
+    "priorityLabel": "Priority",
+    "selectPriority": "Select priority",
+    "lowestPriority": "1 (Lowest)",
+    "mediumPriority": "3 (Medium)",
+    "highestPriority": "5 (Highest)",
+    "failedToSave": "Failed to save note",
+    "createButton": "Create Note",
+    "updateButton": "Update Note"
+  },
+  "sidebar": {
+    "appName": "Kanban Notes",
+    "dashboard": "Dashboard",
+    "notes": "Notes",
+    "archived": "Archived",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+
+  "kanban": {
+    "toDo": "To Do",
+    "inProgress": "In Progress",
+    "done": "Done"
+  },
+
+  "sortableNote": {
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "topBar": {
+    "dashboard": "Dashboard",
+    "searchPlaceholder": "Search notes...",
+    "newNote": "New Note",
+    "toggleUserMenu": "Toggle user menu",
+    "myAccount": "My Account",
+    "settings": "Settings",
+    "support": "Support",
+    "logout": "Logout"
+  }
+}

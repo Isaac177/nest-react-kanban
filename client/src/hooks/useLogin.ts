@@ -25,10 +25,15 @@ export const useLogin = () => {
         }
       }),
     onSuccess: (data) => {
-      localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("refresh_token", data.refresh_token);
-      navigate(`/${i18n.language}/dashboard`);
-    },
+      if (data.access_token && data.access_token !== "undefined" &&
+        data.refresh_token && data.refresh_token !== "undefined") {
+        localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("refresh_token", data.refresh_token);
+        navigate(`/${i18n.language}/dashboard`);
+      } else {
+        throw new Error("Invalid token");
+      }
+    }
   });
 
   return {

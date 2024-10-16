@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import i18next from "i18next";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string || 'https://tx-notes.fly.dev/api'
 
 const api = axios.create({
   baseURL: API_BASE_URL,

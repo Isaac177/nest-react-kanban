@@ -1,0 +1,29 @@
+# Exclude node_modules
+**/node_modules
+
+# Exclude any build artifacts
+**/dist
+**/build
+
+# Exclude version control files
+.git
+.gitignore
+
+# Exclude environment files
+**/.env*
+
+# Exclude IDE files
+.vscode
+.idea
+
+# Do not ignore package.json and yarn.lock
+!**/package.json
+!**/yarn.lock
+
+# Include source files
+!**/src
+!**/public
+
+# Include configuration files
+!**/tsconfig.json
+!**/nest-cli.json

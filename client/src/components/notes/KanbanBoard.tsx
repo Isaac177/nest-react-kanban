@@ -44,9 +44,14 @@ const KanbanBoard: React.FC = () => {
   const { data: fetchedNotesResponse = {} as NotesApiResponse, isLoading, error } = useQuery<NotesApiResponse>({
     queryKey: ['notes'],
     queryFn: async () => {
-      const response = await apiCall<NotesApiResponse>('GET', '/notes');
-      console.log('API response:', response);
-      return response;
+      try {
+        const response = await apiCall<NotesApiResponse>('GET', '/notes');
+        console.log('API response:', response);
+        return response;
+      } catch (error) {
+        console.error('Error fetching notes:', error);
+        throw error;
+      }
     },
   });
 
